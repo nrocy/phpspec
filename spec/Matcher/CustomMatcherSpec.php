@@ -42,5 +42,13 @@ class DescribeCustomMatcher extends \PHPSpec\Context
             $context->spec(10)->should->customEqual(9);
         })->should->throwException("Spec\PHPSpec\Matcher\ExampleCustomMatcherMatchFailed");
     }
+
+    function itShouldNotPassSilentlyIfTheMatcherDoesNotExist() {
+        $context = $this;
+
+        $this->spec(function() use ($context) {
+            $context->spec(7)->should->equl(7);
+        })->should->throwException("\BadMethodCallException");
+    }
 }
 
