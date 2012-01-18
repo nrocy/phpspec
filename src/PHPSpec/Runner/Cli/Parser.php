@@ -33,7 +33,7 @@ class Parser implements \PHPSpec\Runner\Parser
 {
     /**
      * Valid options
-     * 
+     *
      * @var array
      */
     protected $_options = array(
@@ -54,7 +54,7 @@ class Parser implements \PHPSpec\Runner\Parser
         'example'   => false,
         'bootstrap' => false
     );
-    
+
     /**
      * Properties that takes values
      *
@@ -67,10 +67,10 @@ class Parser implements \PHPSpec\Runner\Parser
         'example',
         'bootstrap'
     );
-    
+
     /**
      * Aliases
-     * 
+     *
      * @var array
      */
      protected $_aliases = array(
@@ -80,10 +80,10 @@ class Parser implements \PHPSpec\Runner\Parser
         'f' => 'formatter',
         'e' => 'example'
      );
-    
+
     /**
      * Valid formatters
-     * 
+     *
      * @var array
      */
      protected $_validFormatters = array(
@@ -98,14 +98,14 @@ class Parser implements \PHPSpec\Runner\Parser
         'junit'
      //   'textmate'
      );
-     
+
     /**
-     * 
+     *
      *
      * @var mixed
      */
     protected $_arguments;
-    
+
     /**
      * Parses command line arguments
      *
@@ -124,17 +124,15 @@ class Parser implements \PHPSpec\Runner\Parser
             'Invalid number of arguments. Type -h for help'
         );
     }
-    
+
     /**
      * Removes phpspec script name from command line argument list
      */
     protected function removeProgramNameFromArguments()
     {
-        if (is_file($this->_arguments[0])) {
-            array_shift($this->_arguments);
-        }
+      array_shift($this->_arguments);
     }
-    
+
     /**
      * Extracts spec file. If the first argument is not a - or -- option
      * it should be a spec filename
@@ -146,10 +144,10 @@ class Parser implements \PHPSpec\Runner\Parser
             array_shift($this->_arguments);
         }
     }
-    
+
     /**
      * Converts arguments into options
-     * 
+     *
      * @return array
      */
     private function convertArgumentIntoOptions()
@@ -168,10 +166,10 @@ class Parser implements \PHPSpec\Runner\Parser
         }
         return $this->_options;
     }
-    
+
     /**
      * Converts long arguments, e.g. --argument value, to options
-     * 
+     *
      * @param string $argument
      */
     private function convertLongArgumentstoOptions($arguments, $argument)
@@ -183,10 +181,10 @@ class Parser implements \PHPSpec\Runner\Parser
         }
         $arguments->next();
     }
-    
+
     /**
      * Converts short arguments, e.g. -chv, to options
-     * 
+     *
      * @param string $argument
      */
     private function convertShortArgumentsToOptions($arguments, $argument)
@@ -206,10 +204,10 @@ class Parser implements \PHPSpec\Runner\Parser
             }
         }
     }
-    
+
     /**
      * Checks if value is the next option
-     * 
+     *
      * @param array $options
      * @throws \PHPSpec\Runner\Cli\Error
      */
@@ -221,7 +219,7 @@ class Parser implements \PHPSpec\Runner\Parser
         try {
             if ($value === null) {
                 return false;
-            } 
+            }
             $this->setOption($option, $value);
             $options->next();
         } catch (\Exception $e) {
@@ -232,10 +230,10 @@ class Parser implements \PHPSpec\Runner\Parser
         }
         return true;
     }
-    
+
     /**
      * Checks if value is the next argument
-     * 
+     *
      * @param array $arguments
      * @throws \PHPSpec\Runner\Cli\Error
      */
@@ -245,10 +243,10 @@ class Parser implements \PHPSpec\Runner\Parser
         $arguments->next();
         $this->setOption($option, $arguments->current());
     }
-    
+
     /**
      * Whether this parameter takes a value
-     * 
+     *
      * @param string $option
      * @return boolean
      */
@@ -256,10 +254,10 @@ class Parser implements \PHPSpec\Runner\Parser
     {
         return in_array($option, $this->_takesAValue);
     }
-    
+
     /**
      * Whether this is a long option
-     * 
+     *
      * @param string $option
      * @return boolean
      */
@@ -267,10 +265,10 @@ class Parser implements \PHPSpec\Runner\Parser
     {
         return substr($option, 0, 2) === '--';
     }
-    
+
     /**
      * Whether this is a short option
-     * 
+     *
      * @param string $option
      * @return boolean
      */
@@ -278,7 +276,7 @@ class Parser implements \PHPSpec\Runner\Parser
     {
         return substr($option, 0, 1) === '-';
     }
-    
+
     /**
      * Gets the arguments
      * @return array
@@ -287,10 +285,10 @@ class Parser implements \PHPSpec\Runner\Parser
     {
         return $this->_arguments;
     }
-    
+
     /**
      * Gets an option
-     * 
+     *
      * @param string $name
      * @return NULL|string
      */
@@ -300,10 +298,10 @@ class Parser implements \PHPSpec\Runner\Parser
             return $this->_options[$name];
         }
     }
-    
+
     /**
      * Checks whether an option exists
-     * 
+     *
      * @param string $name
      * @return bool
      */
@@ -311,10 +309,10 @@ class Parser implements \PHPSpec\Runner\Parser
     {
         return isset($this->_options[trim($name)]);
     }
-    
+
     /**
      * Sets an option
-     * 
+     *
      * @param string $name
      * @param string $value
      */
@@ -323,16 +321,16 @@ class Parser implements \PHPSpec\Runner\Parser
         if (!$this->hasOption($name)) {
             throw new \PHPSpec\Runner\Cli\Error("Invalid option $name");
         }
-        
+
         $option = $this->getOptionLongVersion($name);
-        
+
         $setter = "set" . str_replace("-", "", ucfirst($option));
         $this->$setter($value);
     }
-    
+
     /**
      * Gets a long version of an option
-     * 
+     *
      * @param string $name
      * @return string
      */
@@ -346,10 +344,10 @@ class Parser implements \PHPSpec\Runner\Parser
         }
         return $name;
     }
-    
+
     /**
      * Whether this is an one letter option
-     * 
+     *
      * @param string $name
      * @return boolean
      */
@@ -357,10 +355,10 @@ class Parser implements \PHPSpec\Runner\Parser
     {
         return strlen(trim($name)) === 1;
     }
-    
+
     /**
      * Whether this has multiple aliases
-     * 
+     *
      * @param string $name
      * @return boolean
      */
@@ -368,7 +366,7 @@ class Parser implements \PHPSpec\Runner\Parser
     {
         return is_array($this->_aliases[trim($name[0])]);
     }
-    
+
     /**
      * Sets the formatter
      * @param string $formatter
@@ -382,12 +380,12 @@ class Parser implements \PHPSpec\Runner\Parser
                 'Invalid argument for formatter'
             );
         }
-        
+
     }
-    
+
     /**
      * Sets the colour
-     * 
+     *
      * @param boolean $color
      */
     public function setColor($color)
@@ -395,67 +393,67 @@ class Parser implements \PHPSpec\Runner\Parser
         $this->_options['c'] = $this->_options['colour'] =
         $this->_options['color'] = $color;
     }
-    
+
     /**
      * Sets the help option
-     * 
+     *
      * @param boolean $help
      */
     public function setHelp($help)
     {
         $this->_options['h'] = $this->_options['help'] = $help;
     }
-    
+
     /**
      * Sets the version option
-     * 
+     *
      * @param boolean $version
      */
     public function setVersion($version)
     {
         $this->_options['version'] = $version;
     }
-    
+
     /**
      * Sets the autospec option
-     * 
+     *
      * @param boolean $autospec
      */
     public function setAutospec($autospec)
     {
         $this->_options['a'] = $this->_options['autospec'] = $autospec;
     }
-    
+
     /**
      * Sets the backtrace option
-     * 
+     *
      * @param boolean $backtrace
      */
     public function setBacktrace($backtrace)
     {
         $this->_options['b'] = $this->_options['backtrace'] = $backtrace;
     }
-    
+
     /**
      * Sets a fail fast option
-     * 
+     *
      * @param boolean $failfast
      */
     public function setFailfast($failfast)
     {
         $this->_options['failfast'] = $failfast;
     }
-    
+
     /**
      * Sets the example option
-     * 
+     *
      * @param boolean $example
      */
     public function setExample($example)
     {
         $this->_options['e'] = $this->_options['example'] = $example;
     }
-    
+
     /**
      * Sets the bootstrap option
      *
@@ -468,7 +466,7 @@ class Parser implements \PHPSpec\Runner\Parser
                 'Bootstrap file should be given for bootstrap option'
             );
         }
-        
+
         $this->_options['bootstrap'] = $filename;
     }
 }
