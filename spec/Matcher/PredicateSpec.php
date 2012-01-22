@@ -64,14 +64,12 @@ class DescribePredicate extends \PHPSpec\Context
 
 	function itReadsAMethodStartingWithIsUsingShouldAndBe()
 	{
-		$this->pending("TOFIX");
 		$dummy = $this->spec(new Dummy);
 		$dummy->should->beValid();
 	}
 
 	function itReadsAMethodStartingWithIsUsingShouldNotAndBe()
 	{
-		$this->pending("TOFIX");
 		$dummy = $this->spec(new Dummy);
 		$dummy->shouldNot->beInvalid();
 	}
