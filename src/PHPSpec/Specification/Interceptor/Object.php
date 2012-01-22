@@ -39,11 +39,11 @@ class Object extends Interceptor
      * @var array
      */
     protected $_predicate = array('be' => 'is', 'have' => 'has');
-    
+
     /**
      * Proxies call to specification and if method is a dsl call than it calls
      * the interceptor factory for the returned value
-     * 
+     *
      * @param string $method
      * @param array $args
      * @return \PHPSpec\Specification\Interceptor|boolean
@@ -54,13 +54,13 @@ class Object extends Interceptor
         if (!is_null($dslResult)) {
             return $dslResult;
         }
-        
+
         if ($this->isPredicate('have', $method, $args) ||
             $this->isPredicate('be', $method, $args)) {
             $this->performMatching();
             return true;
         }
-        
+
         $object = $this->getActualValue();
         if (method_exists($object, $method)) {
             return InterceptorFactory::create(
@@ -72,13 +72,13 @@ class Object extends Interceptor
             "Call to undefined method {$class}::{$method}"
         );
     }
-    
+
     /**
      * Checks whether a method is a predicate
      *
-     * @param string $type 
-     * @param string $method 
-     * @param array  $args 
+     * @param string $type
+     * @param string $method
+     * @param array  $args
      * @return boolean
      */
     protected function isPredicate($type, $method, $args)
@@ -89,11 +89,11 @@ class Object extends Interceptor
         if (strpos($method, $type) !== 0) {
             return false;
         }
-        
+
         $plain = $this->_predicate[$type] . substr($method, strlen($type));
         $a = $this->_predicate[$type] . substr($method, strlen($type) + 1);
         $an = $this->_predicate[$type] . substr($method, strlen($type) + 2);
-        
+
         switch (true) {
             case method_exists($this->_actualValue, $plain) :
                 $predicate = $plain;
@@ -113,7 +113,7 @@ class Object extends Interceptor
             default:
                 return false;
         }
-        
+
         $this->setExpectedValue($args);
         $this->createMatcher('beTrue');
         $this->setActualValue(
@@ -121,29 +121,23 @@ class Object extends Interceptor
         );
         return true;
     }
-    
+
     /**
      * Proxies call to specification and if argument is a dsl call than it calls
      * the interceptor factory for the returned value
      *
-     * @param string $attribute 
+     * @param string $attribute
      * @return mixed
      */
     public function __get($attribute)
     {
         $dslResult = parent::__get($attribute);
-        if (!is_null($dslResult)) {
-            return $dslResult;
+        if( is_object($dslResult) && isset($dslResult->_expectation) ) {
+          return $dslResult;
         }
-        
-        if (isset($this->getActualValue()->$attribute)) {
-            return InterceptorFactory::create(
-                $this->getActualValue()->$attribute
-            );
-        }
-        trigger_error(
-            "Undefined property: " . get_class($this->getActualValue()) .
-            "::$attribute", E_USER_NOTICE
+
+        return InterceptorFactory::create(
+            $this->getActualValue()->$attribute
         );
     }
 }
