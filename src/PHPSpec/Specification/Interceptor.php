@@ -153,10 +153,11 @@ abstract class Interceptor
             );
         }
 
-        if (!\PHPSpec\Matcher\MatcherRepository::has($method)) {
-            if( !is_null($this->_expectation) ) {
-                throw new \BadMethodCallException;
-            }
+        if (!$this instanceof Interceptor\Object &&
+            $this->_expectation !== null) {
+            throw new \BadMethodCallException(
+                "Call to undefined method $method"
+            );
         }
     }
 
